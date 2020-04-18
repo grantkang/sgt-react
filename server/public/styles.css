@@ -1,3 +1,13 @@
 .average-grade-display {
   font-size: 2rem;
 }
+
+.grade-form-group {
+  display: flex;
+  align-items: center;
+}
+
+.grade-form-group > label {
+  margin: 0 10px;
+  font-size: 1.2rem;
+}
