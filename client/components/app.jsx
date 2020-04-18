@@ -9,6 +9,14 @@ class App extends React.Component {
 
   }
 
+  componentDidMount() {
+    fetch('/api/grades')
+      .then(response => response.json())
+      .then(grades => {
+        this.setState({ grades: grades });
+      });
+  }
+
   render() {
     return (
       <div className="container-fluid">
