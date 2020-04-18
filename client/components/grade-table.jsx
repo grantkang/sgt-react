@@ -9,7 +9,7 @@ class GradeTableComponent extends React.Component {
     );
 
     return (
-      <table className="table">
+      <table className="table table-striped">
         <thead className="thead-light">
           <tr>
             <th scope="col">Student Name</th>
