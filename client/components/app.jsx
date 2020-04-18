@@ -17,10 +17,18 @@ class App extends React.Component {
       });
   }
 
+  getAverageGrade() {
+    const grades = this.state.grades;
+    if (!grades.length) return 0;
+    const sum = grades.reduce((acc, grade) => acc + grade.grade, 0);
+    const average = Math.round(sum / grades.length);
+    return average;
+  }
+
   render() {
     return (
       <div className="container-fluid">
-        <HeaderComponent />
+        <HeaderComponent gradeAverage={this.getAverageGrade().toString()}/>
         <GradeTableComponent grades={this.state.grades} />
       </div>
     );
