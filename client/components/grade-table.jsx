@@ -14,7 +14,7 @@ class GradeTableComponent extends React.Component {
       <GradeComponent key={grade.id} grade={grade} />
     );
     return (
-      <div>
+      <div className="col-lg-9">
         <table className="table table-striped">
           <thead className="thead-dark">
             <tr>

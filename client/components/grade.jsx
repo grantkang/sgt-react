@@ -6,8 +6,8 @@ class GradeComponent extends React.Component {
     return (
       <tr>
         <td>{gradeData.name}</td>
-        <td>{gradeData.grade}</td>
         <td>{gradeData.course}</td>
+        <td>{gradeData.grade}</td>
       </tr>
     );
   }
