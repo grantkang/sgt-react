@@ -8,6 +8,7 @@ class App extends React.Component {
     super(props);
     this.state = { grades: [] };
     this.addGrade = this.addGrade.bind(this);
+    this.deleteGrade = this.deleteGrade.bind(this);
   }
 
   calculateAverageGrade() {
@@ -46,12 +47,23 @@ class App extends React.Component {
       });
   }
 
+  deleteGrade(gradeId) {
+    const req = {
+      method: 'DELETE'
+    };
+    fetch(`/api/grades/${gradeId}`, req)
+      .then(() => {
+        const newGrades = this.state.grades.filter(grade => grade.id !== gradeId);
+        this.setState({ grades: newGrades });
+      });
+  }
+
   render() {
     return (
       <div className="container-fluid">
         <HeaderComponent gradeAverage={this.calculateAverageGrade().toString()}/>
         <div className="row">
-          <GradeTableComponent grades={this.state.grades} />
+          <GradeTableComponent grades={this.state.grades} onDelete={this.deleteGrade}/>
           <GradeFormComponent onSubmit={this.addGrade}/>
         </div>
       </div>

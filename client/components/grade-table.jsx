@@ -11,7 +11,7 @@ class GradeTableComponent extends React.Component {
   render() {
     const grades = this.props.grades;
     const gradeElements = grades.map(grade =>
-      <GradeComponent key={grade.id} grade={grade} />
+      <GradeComponent key={grade.id} grade={grade} onDelete={this.props.onDelete}/>
     );
     return (
       <div className="col-lg-9">
@@ -21,6 +21,7 @@ class GradeTableComponent extends React.Component {
               <th scope="col">Student Name</th>
               <th scope="col">Course</th>
               <th scope="col">Grade</th>
+              <th scope="col">Operations</th>
             </tr>
           </thead>
           <tbody>
