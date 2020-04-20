@@ -11,7 +11,11 @@ class GradeTableComponent extends React.Component {
   render() {
     const grades = this.props.grades;
     const gradeElements = grades.map(grade =>
-      <GradeComponent key={grade.id} grade={grade} onDelete={this.props.onDelete}/>
+      <GradeComponent
+        key={grade.id}
+        grade={grade}
+        onDelete={this.props.onDelete}
+        onTriggerEditMode={this.props.onTriggerEditMode}/>
     );
     return (
       <div className="col-lg-9">
