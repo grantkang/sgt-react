@@ -5,18 +5,31 @@ class GradeFormComponent extends React.Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      id: null,
+      name: '',
+      course: '',
+      grade: ''
+    };
+  }
+
+  handleChange(e) {
+    const input = {};
+    input[e.target.name] = e.target.value;
+    this.setState(input);
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    const gradeInput = this.props.gradeInput;
     const newGrade = {
-      id: parseInt(gradeInput.id),
-      name: gradeInput.name,
-      course: gradeInput.course,
-      grade: parseInt(gradeInput.grade)
+      id: parseInt(this.state.id),
+      name: this.state.name,
+      course: this.state.course,
+      grade: parseInt(this.state.grade)
     };
-    if (this.isCurrentlyEditing()) {
+
+    if (this.isEditing()) {
       this.props.onEdit(newGrade);
     } else {
       this.props.onAdd(newGrade);
@@ -28,14 +41,34 @@ class GradeFormComponent extends React.Component {
     this.props.onReset();
   }
 
-  isCurrentlyEditing() {
-    return this.props.gradeInput.id !== null;
+  componentDidUpdate(prevProps) {
+    const newGrade = this.props.grade;
+    if (this.props.grade !== prevProps.grade) {
+      if (Object.keys(newGrade).length !== 0) {
+        this.setState({
+          id: newGrade.id,
+          name: newGrade.name,
+          course: newGrade.course,
+          grade: newGrade.grade
+        });
+      } else {
+        this.setState({
+          id: null,
+          name: '',
+          course: '',
+          grade: ''
+        });
+      }
+    }
+  }
+
+  isEditing() {
+    return Object.keys(this.props.grade).length !== 0;
   }
 
   render() {
-    const gradeInput = this.props.gradeInput;
-    const submitButtonClassName = !this.isCurrentlyEditing() ? 'btn btn-primary' : 'btn btn-success';
-    const submitButtonTextContent = !this.isCurrentlyEditing() ? 'Add' : 'Edit';
+    const submitButtonClassName = !this.isEditing() ? 'btn btn-primary' : 'btn btn-success';
+    const submitButtonTextContent = !this.isEditing() ? 'Add' : 'Edit';
     return (
       <div className="col-lg-3">
         <form onSubmit={this.handleSubmit} onReset={this.handleReset}>
@@ -49,8 +82,8 @@ class GradeFormComponent extends React.Component {
               id="student-name-input"
               placeholder="Enter name"
               name="name"
-              value={gradeInput.name}
-              onChange={this.props.onChange}/>
+              value={this.state.name}
+              onChange={this.handleChange}/>
           </div>
           <div className="form-group grade-form-group">
             <label htmlFor="course-input">
@@ -62,8 +95,8 @@ class GradeFormComponent extends React.Component {
               id="course-input"
               placeholder="Enter course name"
               name="course"
-              value={gradeInput.course}
-              onChange={this.props.onChange}/>
+              value={this.state.course}
+              onChange={this.handleChange}/>
           </div>
           <div className="form-group grade-form-group">
             <label htmlFor="grade-input">
@@ -75,8 +108,8 @@ class GradeFormComponent extends React.Component {
               id="grade-input"
               placeholder="Enter grade"
               name="grade"
-              value={gradeInput.grade}
-              onChange={this.props.onChange}/>
+              value={this.state.grade}
+              onChange={this.handleChange}/>
           </div>
           <button type="submit" className={submitButtonClassName}>{submitButtonTextContent}</button>
           <button type="reset" className="btn btn-secondary">Cancel</button>

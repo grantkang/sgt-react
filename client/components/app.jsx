@@ -8,23 +8,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       grades: [],
-      gradeInput: this.getNewGradeInput()
+      grade: null
     };
     this.addGrade = this.addGrade.bind(this);
     this.deleteGrade = this.deleteGrade.bind(this);
     this.editGrade = this.editGrade.bind(this);
-    this.triggerEditMode = this.triggerEditMode.bind(this);
-    this.updateGradeInput = this.updateGradeInput.bind(this);
-    this.resetGradeInput = this.resetGradeInput.bind(this);
-  }
-
-  getNewGradeInput() {
-    return {
-      id: null,
-      name: '',
-      course: '',
-      grade: ''
-    };
+    this.setGrade = this.setGrade.bind(this);
+    this.resetGrade = this.resetGrade.bind(this);
   }
 
   calculateAverageGrade() {
@@ -43,7 +33,7 @@ class App extends React.Component {
     fetch('/api/grades')
       .then(response => response.json())
       .then(grades => {
-        this.setState({ grades: grades, gradeInput: this.getNewGradeInput() });
+        this.setState({ grades: grades, grade: null });
       });
   }
 
@@ -59,7 +49,7 @@ class App extends React.Component {
       .then(response => response.json())
       .then(grade => {
         const newGrades = this.state.grades.concat(grade);
-        this.setState({ grades: newGrades, gradeInput: this.getNewGradeInput() });
+        this.setState({ grades: newGrades, grade: null });
       });
   }
 
@@ -70,7 +60,7 @@ class App extends React.Component {
     fetch(`/api/grades/${gradeId}`, req)
       .then(() => {
         const newGrades = this.state.grades.filter(grade => grade.id !== gradeId);
-        this.setState({ grades: newGrades, gradeInput: this.getNewGradeInput() });
+        this.setState({ grades: newGrades, grade: null });
       });
   }
 
@@ -88,28 +78,20 @@ class App extends React.Component {
         const newGrades = this.state.grades.map(grade => {
           return grade.id === editedGrade.id ? editedGrade : grade;
         });
-        this.setState({ grades: newGrades, gradeInput: this.getNewGradeInput() });
+        this.setState({ grades: newGrades, grade: null });
       });
   }
 
-  updateGradeInput(e) {
-    const key = e.target.name;
-    const value = e.target.value;
-    const newInputs = Object.assign({}, this.state.gradeInput);
-    newInputs[key] = value;
-    this.setState({ gradeInput: newInputs });
+  resetGrade() {
+    this.setState({ grade: null });
   }
 
-  resetGradeInput() {
-    this.setState({ gradeInput: this.getNewGradeInput() });
-  }
-
-  triggerEditMode(grade) {
-    this.setState({ gradeInput: grade });
+  setGrade(grade) {
+    this.setState({ grade: grade });
   }
 
   render() {
-    const gradeInput = Object.assign({}, this.state.gradeInput);
+    const grade = Object.assign({}, this.state.grade);
 
     return (
       <div className="container-fluid">
@@ -119,13 +101,12 @@ class App extends React.Component {
           <GradeTableComponent
             grades={this.state.grades}
             onDelete={this.deleteGrade}
-            onTriggerEditMode={this.triggerEditMode}/>
+            onTriggerEditMode={this.setGrade}/>
           <GradeFormComponent
             onAdd={this.addGrade}
             onEdit={this.editGrade}
-            onReset={this.resetGradeInput}
-            gradeInput={gradeInput}
-            onChange={this.updateGradeInput} />
+            onReset={this.resetGrade}
+            grade={grade} />
         </div>
       </div>
     );
